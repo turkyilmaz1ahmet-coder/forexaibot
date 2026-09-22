@@ -1,0 +1,126 @@
+# ==============================================================================
+# Forex AI Bot - Ana Konfigürasyon Dosyası (settings.yaml)
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# 1. Ticaret (Trading) Ayarları
+# ------------------------------------------------------------------------------
+# Botun temel çalışma modu, işlem yapılacak semboller ve zaman dilimleri
+trading:
+  mode: "demo"                  # Çalışma modu: 'demo' veya 'live' (canlı)
+  symbols:                      # İşlem yapılacak döviz çiftleri
+    - "EURUSD"
+    - "GBPUSD"
+    - "USDJPY"
+  primary_timeframe: "H1"       # Ana analiz zaman dilimi (Örn: M1, M5, M15, H1, D1)
+  secondary_timeframe: "M15"    # Giriş/onay için ikincil zaman dilimi
+  magic_number: 1001            # Botun pozisyonlarını tanımlayan benzersiz kimlik numarası
+
+# ------------------------------------------------------------------------------
+# 2. Veri (Data) Ayarları
+# ------------------------------------------------------------------------------
+# MetaTrader 5'ten çekilecek geçmiş veri miktarı ve zaman aşımı değerleri
+data:
+  bars_count: 5000              # Analiz ve model eğitimi için çekilecek mum sayısı
+  tick_timeout: 30              # Veri alma / tick güncellemesi için zaman aşımı (saniye)
+
+# ------------------------------------------------------------------------------
+# 3. Teknik Analiz (Technical) Gösterge Parametreleri
+# ------------------------------------------------------------------------------
+# İndikatör hesaplamalarında kullanılan varsayılan periyot ve katsayılar
+technical:
+  rsi_period: 14                # RSI periyodu
+  macd_fast: 12                 # MACD hızlı periyot
+  macd_slow: 26                 # MACD yavaş periyot
+  macd_signal: 9                # MACD sinyal periyodu
+  ema_periods:                  # Hesaplanacak EMA periyotları
+    - 9
+    - 21
+    - 50
+    - 200
+  atr_period: 14                # ATR (Volatilite) periyodu
+  bollinger_period: 20          # Bollinger Bantları periyodu
+  bollinger_std: 2.0            # Bollinger Bantları standart sapma çarpanı
+
+# ------------------------------------------------------------------------------
+# 4. Makine Öğrenimi (ML) ve Model Parametreleri
+# ------------------------------------------------------------------------------
+# LSTM ve XGBoost modellerinin hiperparametreleri ve ensemble konfigürasyonu
+ml:
+  lookback_window: 60           # Geriye dönük bakılacak mum sayısı (zaman serisi penceresi)
+  prediction_horizon: 5         # Tahmin edilecek ileri mum adımı
+  lstm_epochs: 100              # LSTM eğitim epoch sayısı
+  lstm_batch_size: 32           # LSTM batch boyutu
+  lstm_units:                   # LSTM katmanlarındaki nöron sayıları
+    - 64
+    - 32
+  xgboost_max_depth: 6          # XGBoost maksimum ağaç derinliği
+  xgboost_n_estimators: 200     # XGBoost ağaç sayısı
+  xgboost_learning_rate: 0.05   # XGBoost öğrenme oranı
+  ensemble_weights:             # Model birleşim ağırlıkları (toplam = 1.0)
+    lstm: 0.5
+    xgboost: 0.5
+  retrain_interval_days: 7      # Modellerin otomatik yeniden eğitilme periyodu (gün)
+
+# ------------------------------------------------------------------------------
+# 5. Temel & Duygu Analizi (Fundamental) Ayarları
+# ------------------------------------------------------------------------------
+# LLM tabanlı haber ve ekonomik takvim duygu analizi parametreleri
+fundamental:
+  sentiment_threshold: 0.2      # İşlem için gereken minimum net duygu skoru (-1 ile +1 arası)
+  news_lookback_hours: 24       # Geriye dönük incelenecek haber süresi (saat)
+  calendar_lookback_hours: 48   # Ekonomik takvim inceleme aralığı (saat)
+  llm_model: "gpt-4o-mini"      # Duygu analizi için kullanılacak OpenAI modeli
+  max_api_calls_per_hour: 30    # Saatlik maksimum LLM API istek limiti
+
+# ------------------------------------------------------------------------------
+# 6. Risk Yönetimi (Risk) Ayarları
+# ------------------------------------------------------------------------------
+# Sermaye koruma, stop loss, take profit ve pozisyon büyüklüğü kuralları
+risk:
+  risk_per_trade: 0.01          # İşlem başına riske edilecek sermaye oranı (%1 = 0.01)
+  max_daily_loss: 0.05          # Günlük maksimum kabul edilebilir zarar limiti (%5 = 0.05)
+  max_open_positions: 3         # Aynı anda açık olabilecek maksimum pozisyon sayısı
+  max_spread_points: 30         # İşlem açılmasına izin verilen maksimum spread (puan cinsinden)
+  sl_atr_multiplier: 2.0        # Stop Loss belirlemede kullanılacak ATR çarpanı
+  tp_atr_multiplier: 3.0        # Take Profit belirlemede kullanılacak ATR çarpanı
+  trailing_stop_atr_multiplier: 1.5 # İz süren stop için ATR çarpanı
+  max_slippage_points: 20       # Kabul edilebilir maksimum kayma (slippage puan)
+
+# ------------------------------------------------------------------------------
+# 7. Geriye Dönük Test (Backtest) Ayarları
+# ------------------------------------------------------------------------------
+# Strateji simülasyonu ve geçmiş veri test ortamı parametreleri
+backtest:
+  initial_cash: 100000          # Başlangıç sermayesi (USD)
+  commission_per_unit: 0.000035 # Birim başına işlem komisyonu
+  leverage: 100                 # Kaldıraç oranı (1:100)
+  spread_pips: 1.5              # Test için varsayılan ortalama spread (pip)
+
+# ------------------------------------------------------------------------------
+# 8. Strateji ve Karar Mekanizması (Strategy) Ayarları
+# ------------------------------------------------------------------------------
+# Teknik sinyal, ML tahmini ve duygu skorunun birleştirilme kuralları
+strategy:
+  ml_threshold: 0.60            # ML modelinin işlem açmak için gereken minimum olasılık güveni
+  sentiment_min: 0.15           # Duygu analizinin sinyali destekleme eşiği
+  signal_agreement_required: true # Teknik, ML ve temel analizin aynı yönde olmasını zorunlu kıl
+
+# ------------------------------------------------------------------------------
+# 9. Bildirimler (Notifications)
+# ------------------------------------------------------------------------------
+# Telegram bildirim ve günlük özet raporlama ayarları
+notifications:
+  enabled: true                 # Bildirim sistemi aktif mi?
+  on_trade: true                # İşlem açılış/kapanış bildirimleri
+  on_error: true                # Hata ve uyarı bildirimleri
+  daily_summary: true           # Günlük performans özeti gönderimi
+  daily_summary_hour: 21        # Günlük özetin gönderileceği saat (24 saat formatı)
+
+# ------------------------------------------------------------------------------
+# 10. Kağıt Üzerinde İşlem (Paper Trading) Ayarları
+# ------------------------------------------------------------------------------
+# Canlı piyasada sanal bakiye ile test etme kuralları
+paper_trading:
+  enabled: true                 # Kağıt üzerinde test modu aktif mi?
+  min_demo_days: 30             # Canlıya geçmeden önce zorunlu kılınan minimum demo süresi (gün)

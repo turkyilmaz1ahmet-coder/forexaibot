@@ -1,0 +1,66 @@
+# ==============================================================================
+# Forex AI Bot - Git Ignore Konfigürasyonu
+# ==============================================================================
+
+# Çevresel Değişkenler ve Hassas Bilgiler
+.env
+.env.local
+.env.*.local
+*.env
+
+# Python Bytecode ve Derleme Dosyaları
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Sanal Ortamlar (Virtual Environments)
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE ve Editör Ayarları
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Yapay Zeka Model Ağırlıkları ve Kayıtları
+models/saved/*.h5
+models/saved/*.json
+models/saved/*.pkl
+models/saved/*.keras
+models/saved/*.joblib
+models/saved/*.onnx
+
+# Log ve Raporlama Dosyaları
+logs/
+*.log
+
+# Paketleme ve Dağıtım
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+bin/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+
+# Test ve Coverage Verileri
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# İşletim Sistemi Geçici Dosyaları
+.DS_Store
+Thumbs.db
